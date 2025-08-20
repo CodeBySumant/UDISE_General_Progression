@@ -35,7 +35,7 @@ login_button = WebDriverWait(driver, 15).until(
     EC.element_to_be_clickable((By.ID, "submit-btn"))
 )
 login_button.click()
-time.sleep(2)
+time.sleep(1)
 
 time.sleep(25)
 
@@ -61,7 +61,7 @@ while True:
 ## Drop down to bottom of page
 
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2)
+    time.sleep(1)
 
 ## blood group 
 
@@ -69,28 +69,28 @@ while True:
         EC.presence_of_element_located((By.XPATH, '//select[@formcontrolname="bloodGroup"]'))
     ))
     blood_group_select.select_by_value("9")
-    time.sleep(2)
+    time.sleep(1)
 
 ## click save for general profile
 
     WebDriverWait(driver, 20).until(
         EC.element_to_be_clickable((By.XPATH, "//button[normalize-space(span/text())='Save']"))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
 ## close buttom after clicking save
 
     WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "div.swal2-actions > button.swal2-confirm"))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
 ## next button after clicking close
 
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '//button[@type="button" and @matsteppernext]'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
 ###General Profile__Ends
 
@@ -98,27 +98,27 @@ while True:
 
     # drop down to submission
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2)
+    time.sleep(1)
 
     # click 4.2.6	(a) Whether Admitted under Section 12C of RTE Act? "NO"
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[2]/form/div/app-enrolment-edit-new-ac/div/div/div/form/div[1]/div/div/div[10]/div/div[2]/div[2]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     ## click save for Enrolment Profile
 
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[2]/form/div/app-enrolment-edit-new-ac/div/div/div/form/div[2]/div/button[2]'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     ## Click Next after clicking save
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, "swal2-cancel"))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
 ###Enrolment Profile_ends
 
@@ -128,43 +128,43 @@ while True:
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[1]/div[1]/span[1]/div[2]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     #click 4.3.4 Whether Student has been screened for Autism Spectrum Disorder (ASD)?
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[1]/div[2]/span/div[2]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     #click 4.3.5 Whether Student has been screened for Attention Deficit Hyperactive Disorder (ADHD)?
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[1]/div[3]/span/div[2]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     #click 4.3.6 as the Student been identified as a Gifted / Talented?
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[1]/div[4]/span/div[2]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     #click 4.3.7 Does the student appeared in any State Level Competitions/ National level Competitions/ Olympiads?
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[2]/div[1]/span/div[2]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     #click 4.3.8 Does the Student participate in NCC/ NSS/ Scouts and Guides?
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[2]/div[2]/span/div[2]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     #click 4.3.9 Whether student is capable of handling digital devices including the internet?
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[2]/div[3]/span/div[1]/input'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
 # Height (cm) and Weight (kg) data for Class 1 to 10
 
@@ -194,7 +194,6 @@ while True:
 
     print(student_height)
     print(student_weight)
-    sys.exit()
 
     # Dynamic XPaths (short & reliable using IDs)
     height_xpath = "//input[@id='height']"
@@ -216,26 +215,27 @@ while True:
         EC.presence_of_element_located((By.XPATH, '//select[@formcontrolname="distanceFrmSchool"]'))
     )
     Select(distance_dropdown).select_by_value("2")
-    time.sleep(2)
+    time.sleep(1)
 
     #click 4.3.12 Completed Highest Education Level of Mother/Father/Legal Guardian
     parent_education_dropdown = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '//select[@formcontrolname="parentEducation"]'))
     )
     Select(parent_education_dropdown).select_by_value("5")
-    time.sleep(2)
+    time.sleep(1)
 
     # click save for Facility Profile
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[2]/div/button[2]'))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
 
     #click next after clicking Save for Facility Profile
     WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/div[6]/button[3]'))
+        EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Next')]"))
     ).click()
-    time.sleep(2)
+    time.sleep(1)
+
 
 ###Facility Profile_ends
 
@@ -243,7 +243,7 @@ while True:
 
     # drop down to submission
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2)
+    time.sleep(1)
 
     #click on Complete Data
     WebDriverWait(driver, 10).until(
@@ -251,17 +251,26 @@ while True:
     ).click()
     time.sleep(2)
 
-    # click Okay
+    # # click Okay
+    # WebDriverWait(driver, 10).until(
+    #     EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Okay']"))
+    # ).click()
+    # time.sleep(2)
+
+    # #click next student
+    # WebDriverWait(driver, 10).until(
+    #     EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Next Student']"))
+    # ).click()
+    # time.sleep(2)
+
     WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div[6]/button[3]'))
+        EC.presence_of_element_located((By.XPATH, '//button[@type="button" and contains(@class, "swal2-cancel")]'))
     ).click()
     time.sleep(2)
 
-    #click next student
     WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/div[6]/button[3]'))
+        EC.presence_of_element_located((By.XPATH, '//button[@type="button" and contains(text(), "Next Student")]'))
     ).click()
     time.sleep(2)
-
 ###Profile Preview_Ends
     student_count += 1

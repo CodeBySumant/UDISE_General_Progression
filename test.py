@@ -1,7 +1,6 @@
 import random
 import sys
 
-
 class_data = {
     1: {"height_cm": 115, "weight_kg": 21},
     2: {"height_cm": 122, "weight_kg": 23},
