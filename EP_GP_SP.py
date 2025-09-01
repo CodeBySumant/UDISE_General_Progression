@@ -56,6 +56,7 @@ while True:
 ## Drop down to bottom of page
 
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(1)
 
 ## blood group 
 
@@ -301,6 +302,6 @@ while True:
         EC.presence_of_element_located((By.XPATH, '//button[@type="button" and contains(text(), "Next Student")]'))
     ).click()
     time.sleep(2)
-    
+
 ###Profile Preview_Ends
     student_count += 1
