@@ -21,10 +21,10 @@ driver.get("https://sdms.udiseplus.gov.in/p0/v1/login?state-id=110")
 driver.maximize_window()
 
 input_element = driver.find_element(By.CLASS_NAME, "form-control")
-input_element.send_keys("10030202112")
+input_element.send_keys("")
 
 input_element = driver.find_element(By.ID, "password-field")
-input_element.send_keys("GF55#pby")
+input_element.send_keys("")
 time.sleep(15)
 
 login_button = WebDriverWait(driver, 15).until(
