@@ -21,10 +21,10 @@ driver.get("https://sdms.udiseplus.gov.in/p0/v1/login?state-id=110")
 driver.maximize_window()
 
 input_element = driver.find_element(By.CLASS_NAME, "form-control")
-input_element.send_keys("10140802701")
+input_element.send_keys("10030202112")
 
 input_element = driver.find_element(By.ID, "password-field")
-input_element.send_keys("koyES#28")
+input_element.send_keys("GF55#pby")
 time.sleep(15)
 
 login_button = WebDriverWait(driver, 15).until(
@@ -40,31 +40,23 @@ while True:
 
     print(f"Processing student #{student_count}")
 
-## Student Mobile Number
-
-    first_digit = str(random.choice([6, 7, 8, 9]))
-    remaining_digits = ''.join(str(random.randint(0, 9)) for _ in range(9))
-    random_10_digit = first_digit + remaining_digits
-
-    input_box = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//input[@formcontrolname='primaryMobile']"))
-    )
-    input_box.clear()
-    input_box.send_keys(random_10_digit)
-    time.sleep(1)
 
 ## Drop down to bottom of page
 
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(1)
+    
+    # Fills up the blood group (only if empty)
+    try:
+        blood_group_select = Select(WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "select[formcontrolname='bloodGroup']"))
+        ))
 
-## blood group 
-
-    blood_group_select = Select(WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//select[@formcontrolname="bloodGroup"]'))
-    ))
-    blood_group_select.select_by_value("9")
-    time.sleep(1)
+        # Check if a value is already selected
+        if blood_group_select.first_selected_option.get_attribute("value") == "":
+            blood_group_select.select_by_value("9")
+    except Exception as e:
+        print(f'Error while selecting blood group: {e}')
 
 ## click save for general profile
 
@@ -90,27 +82,18 @@ while True:
 ###General Profile__Ends
 
 ###Enrolment Profile_Starts
-
     # drop down to submission
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(1)
 
-    # click 4.2.6	(a) Whether Admitted under Section 12C of RTE Act? "NO"
-    try:
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[2]/form/div/app-enrolment-edit-new-ac/div/div/div/form/div[1]/div/div/div[10]/div/div[2]/div[2]/input'))
-        ).click()
-    except:
-        print("Element not found, skipping to next step.")        
+     
     ## click save for Enrolment Profile
-
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[2]/form/div/app-enrolment-edit-new-ac/div/div/div/form/div[2]/div/button[2]'))
     ).click()
     time.sleep(1)
 
     ## Click Next after clicking save
-
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, "swal2-cancel"))
     ).click()
@@ -121,12 +104,30 @@ while True:
 ### Facility Profile_starts
 
     #4.3.1 Whether Facilities provided to the Student (for the year of filling data)?
+    # For NO option
+    # try:
+    #     WebDriverWait(driver, 10).until(
+    #         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[1]/div[1]/span[1]/div[2]/input'))
+    #     ).click()
+    # except Exception as e:
+    #     print(f"Error clicking radio button: {e}")
+    
+    # For YES & Free TextBook
     try:
+        # Yes
         WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[1]/div[1]/span[1]/div[2]/input'))
+            # EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div[3]/div/div/div/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[1]/div[1]/span[1]/div[1]/input'))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[formcontrolname='facProvYN'][value='1']"))
         ).click()
+
+        # Free TextBook
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input#textbook.form-check-input[type='checkbox']"))
+        ).click()
+        
     except Exception as e:
         print(f"Error clicking radio button: {e}")
+        
 
     # click 4.3.3 Whether Student has been screened for Specific Learning Disability (SLD)?
     try:
@@ -195,16 +196,25 @@ while True:
         print(f"Error clicking NCC/NSS/Scouts checkbox: {e}")
 
     # click 4.3.9 Capable of handling digital devices including internet
+    # For YES
+    # try:
+    #     WebDriverWait(driver, 10).until(
+    #         EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[2]/div[3]/span/div[1]/input'))
+    #     ).click()
+    # except Exception as e:
+    #     print(f"Error clicking Digital Devices checkbox: {e}")
+    
+    # For NO
     try:
         WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[2]/div[3]/span/div[1]/input'))
+            # EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div[3]/div/div/div/form/div/app-other-details-edit-new-ac/div/div/div/form/div[1]/div/div/div[2]/div[3]/span/div[2]/input'))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='DGC'][value='2']"))
         ).click()
     except Exception as e:
         print(f"Error clicking Digital Devices checkbox: {e}")
 
 
 # Height (cm) and Weight (kg) data for Class 1 to 10
-
     class_data = {
         1: {"height_cm": 115, "weight_kg": 21},
         2: {"height_cm": 122, "weight_kg": 23},
@@ -219,7 +229,7 @@ while True:
     }
 
     # choose Class student
-    selected_class = 3
+    selected_class = 10
 
 
     # Base values
