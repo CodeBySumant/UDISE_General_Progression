@@ -30,10 +30,10 @@ driver.get("https://sdms.udiseplus.gov.in/p0/v1/login?state-id=110")
 driver.maximize_window()
 
 input_element = driver.find_element(By.CLASS_NAME, "form-control")
-input_element.send_keys("Username")
+input_element.send_keys("10140807501")
 
 input_element = driver.find_element(By.ID, "password-field")
-input_element.send_keys("Password")
+input_element.send_keys("78#YCumf")
 time.sleep(15)
 
 try:
@@ -294,7 +294,7 @@ while True:
 
     # drop down to submission
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(0.3)
+    time.sleep(1)
 
     #click on Complete Data
     WebDriverWait(driver, 10).until(
