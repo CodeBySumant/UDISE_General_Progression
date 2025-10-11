@@ -30,10 +30,11 @@ driver.get("https://sdms.udiseplus.gov.in/p0/v1/login?state-id=110")
 driver.maximize_window()
 
 input_element = driver.find_element(By.CLASS_NAME, "form-control")
-input_element.send_keys("10140807501")
-
+input_element.send_keys("")
+# next 10140615303
+# next 10140601611
 input_element = driver.find_element(By.ID, "password-field")
-input_element.send_keys("78#YCumf")
+input_element.send_keys("")
 time.sleep(15)
 
 try:
@@ -98,6 +99,52 @@ while True:
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(0.3)
 
+    # selecting 4.2.3	(b) Languages Group Studied by the Student
+
+    try:
+        dropdown_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "languageGroup"))
+        )
+        select = Select(dropdown_element)
+        select.select_by_visible_text("English_Hindi_Sanskrit")
+    except Exception as e:
+        print(f"⚠️ Error selecting from dropdown: {e}")
+
+    time.sleep(0.3)
+
+    # 4.2.4	(b) Subjects Group Studied by the Student
+
+    # Fills up the subjects (only if not already selected)
+    try:
+        # Wait until the dropdown is present and click to open it
+        dropdown = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]"))
+        )
+        dropdown.click()
+        time.sleep(2)  # Wait for the dropdown options to be visible
+
+        # List of subjects to select
+        subjects_to_select = ["Geography", "History", "Political Science", "Economics"]
+
+        # Loop through each subject and click its checkbox
+        for subject in subjects_to_select:
+            try:
+                checkbox = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable(
+                        (By.XPATH, f"//div[@class='dropdown-list']//div[text()='{subject}']")
+                    )
+                )
+                checkbox.click()
+                time.sleep(0.5)  # Small delay to ensure the click is registered
+                print(f"Selected subject: {subject}")
+            except Exception as e:
+                print(f"Could not select subject {subject}: {e}")
+
+    except Exception as e:
+        print(f"Error while clicking the subject dropdown: {e}")
+    time.sleep(0.3)
+
+    
     # click 4.2.6	(a) Whether Admitted under Section 12C of RTE Act? "NO"
     try:
         WebDriverWait(driver, 10).until(
@@ -105,6 +152,8 @@ while True:
         ).click()
     except:
         print("Element not found, skipping to next step.")
+
+    time.sleep(0.3)
         
     ## click save for Enrolment Profile
 
