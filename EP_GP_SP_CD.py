@@ -149,12 +149,35 @@ while True:
                         )
                     )
                     checkbox.click()
-                    time.sleep(0.5)  # Small delay to ensure the click is registered
+                    time.sleep(1)  # Small delay to ensure the click is registered
                     print(f"Selected subject: {subject}")
                 except Exception as e:
                     print(f"Could not select subject {subject}: {e}")
-                    
 
+                    # try to re-open the dropdown and retry once
+                    try:
+                        dropdown = WebDriverWait(driver, 5).until(
+                            EC.element_to_be_clickable(
+                                (By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]")
+                            )
+                        )
+                        dropdown.click()
+                        time.sleep(0.5)  # let Angular render
+
+                        # retry to find & click the subject inside the visible dropdown
+                        retry_checkbox = WebDriverWait(driver, 6).until(
+                            EC.element_to_be_clickable(
+                                (By.XPATH, f"//div[contains(@class,'dropdown-list') and not(@hidden)]//div[normalize-space()='{subject}']")
+                            )
+                        )
+                        retry_checkbox.click()
+                        time.sleep(0.3)
+                        print(f"Selected subject on retry: {subject}")
+
+                    except Exception as e2:
+                        print(f"Retry failed for subject {subject}: {e2}")
+                        # continue to next subject
+                    
         elif selected_value == "2":  # SCIENCE
             print("Science stream detected. Selecting subjects...")
 
@@ -179,14 +202,35 @@ while True:
                         )
                     )
                     checkbox.click()
-                    time.sleep(0.5)  # Small delay to ensure the click is registered
+                    time.sleep(1)  # Small delay to ensure the click is registered
                     print(f"Selected subject: {subject}")
                 except Exception as e:
                     print(f"Could not select subject {subject}: {e}")
-                    EC.presence_of_element_located(
-                    (By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]")
-                )
-                    dropdown.click()
+
+                    # try to re-open the dropdown and retry once
+                    try:
+                        dropdown = WebDriverWait(driver, 5).until(
+                            EC.element_to_be_clickable(
+                                (By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]")
+                            )
+                        )
+                        dropdown.click()
+                        time.sleep(0.5)  # let Angular render
+
+                        # retry to find & click the subject inside the visible dropdown
+                        retry_checkbox = WebDriverWait(driver, 6).until(
+                            EC.element_to_be_clickable(
+                                (By.XPATH, f"//div[contains(@class,'dropdown-list') and not(@hidden)]//div[normalize-space()='{subject}']")
+                            )
+                        )
+                        retry_checkbox.click()
+                        time.sleep(0.3)
+                        print(f"Selected subject on retry: {subject}")
+
+                    except Exception as e2:
+                        print(f"Retry failed for subject {subject}: {e2}")
+                        # continue to next subject
+
         else:
             print("Stream is not Arts. Skipping subject selection.")
 
@@ -194,7 +238,6 @@ while True:
         print(f"Error while checking stream or selecting subjects: {e}")
 
     time.sleep(0.3)
-
     # click 4.2.6	(a) Whether Admitted under Section 12C of RTE Act? "NO"
     try:
         WebDriverWait(driver, 10).until(
