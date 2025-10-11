@@ -30,11 +30,11 @@ driver.get("https://sdms.udiseplus.gov.in/p0/v1/login?state-id=110")
 driver.maximize_window()
 
 input_element = driver.find_element(By.CLASS_NAME, "form-control")
-input_element.send_keys("")
+input_element.send_keys("10140601611")
 # next 10140615303
 # next 10140601611
 input_element = driver.find_element(By.ID, "password-field")
-input_element.send_keys("")
+input_element.send_keys("xde75RN#")
 time.sleep(15)
 
 try:
@@ -115,36 +115,86 @@ while True:
     # 4.2.4	(b) Subjects Group Studied by the Student
 
     # Fills up the subjects (only if not already selected)
+
     try:
-        # Wait until the dropdown is present and click to open it
-        dropdown = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]"))
+        # Wait for the stream dropdown
+        stream_select = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//select[@formcontrolname='academicStream']"))
         )
-        dropdown.click()
-        time.sleep(2)  # Wait for the dropdown options to be visible
+        select = Select(stream_select)
+        selected_value = select.first_selected_option.get_attribute("value").strip()
+        print(f"Selected stream value: {selected_value}")
 
-        # List of subjects to select
-        subjects_to_select = ["Geography", "History", "Political Science", "Economics"]
+        if selected_value == "1":  # ARTS
+            print("Arts stream detected. Selecting subjects...")
 
-        # Loop through each subject and click its checkbox
-        for subject in subjects_to_select:
-            try:
-                checkbox = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable(
-                        (By.XPATH, f"//div[@class='dropdown-list']//div[text()='{subject}']")
-                    )
+            # Wait until the dropdown is present and click to open it
+            dropdown = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]")
                 )
-                checkbox.click()
-                time.sleep(0.5)  # Small delay to ensure the click is registered
-                print(f"Selected subject: {subject}")
-            except Exception as e:
-                print(f"Could not select subject {subject}: {e}")
+            )
+            dropdown.click()
+            time.sleep(2)  # Wait for the dropdown options to be visible
+
+            # List of subjects to select
+            subjects_to_select = ["Geography", "History", "Political Science", "Economics"]
+
+            # Loop through each subject and click its checkbox
+            for subject in subjects_to_select:
+                try:
+                    checkbox = WebDriverWait(driver, 10).until(
+                        EC.element_to_be_clickable(
+                            (By.XPATH, f"//div[@class='dropdown-list']//div[text()='{subject}']")
+                        )
+                    )
+                    checkbox.click()
+                    time.sleep(0.5)  # Small delay to ensure the click is registered
+                    print(f"Selected subject: {subject}")
+                except Exception as e:
+                    print(f"Could not select subject {subject}: {e}")
+                    
+
+        elif selected_value == "2":  # SCIENCE
+            print("Science stream detected. Selecting subjects...")
+
+            # Wait until the dropdown is present and click to open it
+            dropdown = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]")
+                )
+            )
+            dropdown.click()
+            time.sleep(2)  # Wait for the dropdown options to be visible
+
+            # List of subjects to select
+            subjects_to_select = ["Physics", "Chemistry", "Mathematics"]
+
+            # Loop through each subject and click its checkbox
+            for subject in subjects_to_select:
+                try:
+                    checkbox = WebDriverWait(driver, 10).until(
+                        EC.element_to_be_clickable(
+                            (By.XPATH, f"//div[@class='dropdown-list']//div[text()='{subject}']")
+                        )
+                    )
+                    checkbox.click()
+                    time.sleep(0.5)  # Small delay to ensure the click is registered
+                    print(f"Selected subject: {subject}")
+                except Exception as e:
+                    print(f"Could not select subject {subject}: {e}")
+                    EC.presence_of_element_located(
+                    (By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]")
+                )
+                    dropdown.click()
+        else:
+            print("Stream is not Arts. Skipping subject selection.")
 
     except Exception as e:
-        print(f"Error while clicking the subject dropdown: {e}")
+        print(f"Error while checking stream or selecting subjects: {e}")
+
     time.sleep(0.3)
 
-    
     # click 4.2.6	(a) Whether Admitted under Section 12C of RTE Act? "NO"
     try:
         WebDriverWait(driver, 10).until(
