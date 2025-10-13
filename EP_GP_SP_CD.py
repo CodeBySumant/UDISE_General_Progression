@@ -30,10 +30,10 @@ driver.get("https://sdms.udiseplus.gov.in/p0/v1/login?state-id=110")
 driver.maximize_window()
 
 input_element = driver.find_element(By.CLASS_NAME, "form-control")
-input_element.send_keys("10140807501")
+input_element.send_keys("username")
 
 input_element = driver.find_element(By.ID, "password-field")
-input_element.send_keys("78#YCumf")
+input_element.send_keys("password")
 time.sleep(15)
 
 try:
@@ -60,7 +60,7 @@ while True:
         )
         current_value = phone_input.get_attribute("value").strip()
 
-        if current_value == "9999999991":
+        if current_value in ("9999999991", "9999999999"):
             phone_input.clear()
             random_suffix = str(random.randint(10000, 99999))
             full_number = "97855" + random_suffix
@@ -78,6 +78,8 @@ while True:
 
     except Exception as e:
         print(f"❌ Error processing phone number field: {e}")
+    
+    time.sleep(0.5)
 
     ## Drop down to bottom of page
 
