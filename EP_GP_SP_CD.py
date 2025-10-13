@@ -52,7 +52,34 @@ while True:
 
     print(f"Processing student #{student_count}")
     
-## Drop down to bottom of page
+    #4.1.10	(a) Mobile Number
+
+    try:
+        phone_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "phoneNo"))
+        )
+        current_value = phone_input.get_attribute("value").strip()
+
+        if current_value == "9999999991":
+            phone_input.clear()
+            random_suffix = str(random.randint(10000, 99999))
+            full_number = "97855" + random_suffix
+            phone_input.send_keys(full_number)
+            print(f"✅ Replaced old number with new generated number: {full_number}")
+
+        elif not current_value:
+            random_suffix = str(random.randint(10000, 99999))
+            full_number = "97855" + random_suffix
+            phone_input.send_keys(full_number)
+            print(f"✅ Filled new phone number: {full_number}")
+
+        else:
+            print(f"ℹ️ Existing phone number '{current_value}' is valid, skipping.")
+
+    except Exception as e:
+        print(f"❌ Error processing phone number field: {e}")
+
+    ## Drop down to bottom of page
 
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(1)
@@ -98,8 +125,44 @@ while True:
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(0.5)
 
-    # selecting 4.2.3	(b) Languages Group Studied by the Student
+    #4.2.1	Admission Number in Present School (only if empty)
+    try:
+        input_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "admNo"))
+        )
+        current_value = input_element.get_attribute("value").strip()
 
+        if not current_value:  # Only fill if empty
+            input_element.send_keys(str(random.randint(10, 99)))
+            print("✅ Random 2-digit number filled successfully.")
+        else:
+            print("ℹ️ Input already has a value, skipping fill.")
+
+    except Exception as e:
+        print(f"❌ Element not found or error occurred: {e}")
+
+    time.sleep(0.5)
+
+    #4.2.3	(a) Medium of Instruction
+    try:
+        dropdown_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "medium"))
+        )
+        select = Select(dropdown_element)
+
+        # Get the currently selected option text
+        current_option = select.first_selected_option.text.strip()
+
+        if current_option.lower() == "select":
+            select.select_by_visible_text("4-Hindi")
+            print("✅ '4-Hindi' selected successfully.")
+        else:
+            print(f"ℹ️ Already selected: {current_option}, skipping change.")
+
+    except Exception as e:
+        print(f"❌ Error selecting Medium of Instruction: {e}")
+
+    # selecting 4.2.3	(b) Languages Group Studied by the Student
     try:
         dropdown_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, "languageGroup"))
@@ -116,7 +179,6 @@ while True:
             
     except Exception as e:
         print(f"Dropdown not found or selection failed: {e}")
-
 
     time.sleep(0.5)
 
@@ -186,14 +248,14 @@ while True:
 
     time.sleep(1)
         
-    ## click save for Enrolment Profile
+## click save for Enrolment Profile
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[2]/form/div/app-enrolment-edit-new-ac/div/div/div/form/div[2]/div/button[2]'))
     ).click()
     time.sleep(0.5)
 
-    ## Click Next after clicking save
+## Click Next after clicking save
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, "swal2-cancel"))
@@ -222,6 +284,16 @@ while True:
     except Exception as e:
         print(f"Error clicking YES radio button: {e}")
 
+    #4.3.2Facilities provided to Student in case of CWSN (for the year of filling data)
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "input[formcontrolname='cwsnYN'][value='2']"))
+        ).click()
+        print("✅ CWSN radio (value=2) selected successfully.")
+    except Exception as e:
+        print(f"❌ Error selecting CWSN radio: {e}")
+
+    time.sleep(0.5)
     # click 4.3.3 Whether Student has been screened for Specific Learning Disability (SLD)?
     try:
         sld_radio = WebDriverWait(driver, 10).until(
