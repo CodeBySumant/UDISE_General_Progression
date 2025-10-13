@@ -30,11 +30,10 @@ driver.get("https://sdms.udiseplus.gov.in/p0/v1/login?state-id=110")
 driver.maximize_window()
 
 input_element = driver.find_element(By.CLASS_NAME, "form-control")
-input_element.send_keys("10140615303")
-# next 10140615303
-# next 10140601611
+input_element.send_keys("10140807501")
+
 input_element = driver.find_element(By.ID, "password-field")
-input_element.send_keys("58#wwhLG")
+input_element.send_keys("78#YCumf")
 time.sleep(15)
 
 try:
@@ -75,21 +74,21 @@ while True:
     WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.XPATH, "//button[normalize-space(span/text())='Save']"))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
 ## close buttom after clicking save
 
     WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "div.swal2-actions > button.swal2-confirm"))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
 ## next button after clicking close
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '//button[@type="button" and @matsteppernext]'))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
 ###General Profile__Ends
 
@@ -97,7 +96,7 @@ while True:
 
     # drop down to submission
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     # selecting 4.2.3	(b) Languages Group Studied by the Student
 
@@ -106,69 +105,20 @@ while True:
             EC.presence_of_element_located((By.ID, "languageGroup"))
         )
         select = Select(dropdown_element)
-        select.select_by_visible_text("English_Hindi_Sanskrit")
+        
+        # Try one, if not found, try the other
+        try:
+            select.select_by_visible_text("English_Hindi_Sanskrit")
+            print("Selected English_Hindi_Sanskrit")
+        except:
+            select.select_by_visible_text("Hindi_English_Sanskrit")
+            print("Selected Hindi_English_Sanskrit")
+            
     except Exception as e:
-        print(f"⚠️ Error selecting from dropdown: {e}")
+        print(f"Dropdown not found or selection failed: {e}")
 
-    time.sleep(0.3)
 
-    # 4.2.4	(b) Subjects Group Studied by the Student
-    
-    # Select subjects based on academic stream
-    try:
-        stream_select = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//select[@formcontrolname='academicStream']"))
-        )
-        selected_stream = Select(stream_select).first_selected_option.get_attribute("value").strip()
-        print(f"Selected stream value: {selected_stream}")
-        subject_options = {
-            "1": ["Geography", "History", "Economics"],  # Arts
-            "2": ["Physics", "Chemistry", "Mathematics"] # Science
-        }
-        if selected_stream in subject_options:
-            print(("Arts" if selected_stream == "1" else "Science") + " stream detected. Selecting subjects...")
-            dropdown_btn = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]"))
-            )
-            dropdown_btn.click()
-            time.sleep(2)
-            for subject in subject_options[selected_stream]:
-                try:
-                    checkbox = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
-                        (By.XPATH, f"//div[@class='dropdown-list']//div[text()='{subject}']")
-                    ))
-                    checkbox.click()
-                    time.sleep(1)
-                    print(f"Selected subject: {subject}")
-                except Exception as e:
-                    print(f"Could not select subject {subject}: {e}")
-                    try:
-                        # Retry opening dropdown and selecting
-                        dropdown_btn.click()
-                        time.sleep(0.5)
-                        retry_cb = WebDriverWait(driver, 6).until(
-                            EC.element_to_be_clickable((By.XPATH, f"//div[contains(@class,'dropdown-list') and not(@hidden)]//div[normalize-space()='{subject}']"))
-                        )
-                        retry_cb.click()
-                        time.sleep(0.3)
-                        print(f"Selected subject on retry: {subject}")
-                    except Exception as e2:
-                        print(f"Retry failed for subject {subject}: {e2}")
-        else:
-            print("Stream is not Arts/Science or already set. Skipping subject selection.")
-    except Exception as e:
-        print(f"Error selecting subjects: {e}")
-    time.sleep(0.3)
-
-    # 4.2.6(a) RTE Act Section 12C: Click "No"
-    try:
-        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH,
-            '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper'
-            '/div/div[2]/div[2]/form/div/app-enrolment-edit-new-ac/div/div/div/form/div[1]/div/div/div[10]/div/div[2]/div[2]/input'
-        ))).click()
-    except Exception as e:
-        print(f"Element for RTE Act not found: {e}")
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     # click 4.2.6	(a) Whether Admitted under Section 12C of RTE Act? "NO"
     try:
@@ -178,21 +128,77 @@ while True:
     except:
         print("Element not found, skipping to next step.")
 
-    time.sleep(0.3)
+    time.sleep(0.5)
+
+    # 4.2.4	(b) Subjects Group Studied by the Student
+
+    # Select subjects based on academic stream
+    try:
+        stream_select = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//select[@formcontrolname='academicStream']"))
+        )
+        selected_stream = Select(stream_select).first_selected_option.get_attribute("value").strip()
+        print(f"Selected stream value: {selected_stream}")
+
+        subject_options = {
+            "1": ["Geography", "History", "Economics"],  # Arts
+            "2": ["Physics", "Chemistry", "Mathematics"] # Science
+        }
+
+        if selected_stream in subject_options:
+            stream_name = "Arts" if selected_stream == "1" else "Science"
+            print(f"{stream_name} stream detected. Selecting subjects...")
+
+            # Open the dropdown
+            dropdown_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//ng-multiselect-dropdown[@formcontrolname='subjectGroup']//span[contains(@class,'dropdown-btn')]")
+                )
+            )
+            dropdown_btn.click()
+            time.sleep(1)
+            # Select subjects dynamically
+            for subject in subject_options[selected_stream]:
+                try:
+                    # Find the option each time (Angular may re-render the list)
+                    option = WebDriverWait(driver, 5).until(
+                        EC.element_to_be_clickable(
+                            (By.XPATH, f"//div[contains(@class,'dropdown-list')]//div[normalize-space(text())='{subject}']")
+                        )
+                    )
+                    try:
+                        option.click()
+                        time.sleep(0.5)
+                    except:
+                        # JS click fallback
+                        driver.execute_script("arguments[0].click();", option)
+
+                    print(f"✅ Selected subject: {subject}")
+                    time.sleep(1)
+                except:
+                    print(f"⚠️ Could not select '{subject}'")
+
+        else:
+            print("Stream is not Arts/Science or already set. Skipping subject selection.")
+
+    except Exception as e:
+        print(f"Stream element not found or other error: {e}")
+
+    time.sleep(1)
         
     ## click save for Enrolment Profile
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[2]/form/div/app-enrolment-edit-new-ac/div/div/div/form/div[2]/div/button[2]'))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     ## Click Next after clicking save
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, "swal2-cancel"))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
 ###Enrolment Profile_ends
 
@@ -204,14 +210,14 @@ while True:
             EC.presence_of_element_located((By.XPATH, "//input[@type='radio' and @formcontrolname='facProvYN' and @value='1']"))
         )
         driver.execute_script("arguments[0].click();", yes_radio)
-        time.sleep(0.3)
+        time.sleep(0.5)
 
         # Click Free TextBook after selecting YES
         textbook_checkbox = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//input[@type='checkbox' and @id='textbook']"))
         )
         textbook_checkbox.click()
-        time.sleep(0.3)
+        time.sleep(0.5)
 
     except Exception as e:
         print(f"Error clicking YES radio button: {e}")
@@ -306,7 +312,7 @@ while True:
         7: {"height_cm": 149, "weight_kg": 40},
         8: {"height_cm": 156, "weight_kg": 45},
         9: {"height_cm": 164, "weight_kg": 51},
-        10: {"height_cm": 170, "weight_kg": 56},
+        10: {"height_cm": 171, "weight_kg": 56},
     }
 
     # Base values
@@ -340,26 +346,26 @@ while True:
         EC.presence_of_element_located((By.XPATH, '//select[@formcontrolname="distanceFrmSchool"]'))
     )
     Select(distance_dropdown).select_by_value("2")
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     #click 4.3.12 Completed Highest Education Level of Mother/Father/Legal Guardian
     parent_education_dropdown = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '//select[@formcontrolname="parentEducation"]'))
     )
     Select(parent_education_dropdown).select_by_value("5")
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     # click save for Facility Profile
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[3]/form/div/app-other-details-edit-new-ac/div/div/div/form/div[2]/div/button[2]'))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     #click next after clicking Save for Facility Profile
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Next')]"))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
 
 ###Facility Profile_ends
@@ -374,7 +380,7 @@ while True:
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '/html/body/app-root/app-admin-dashboard/div[2]/div[2]/main/div/div/div/app-edit-student-new-ac/div/div/div/div/div[2]/div/mat-stepper/div/div[2]/div[4]/div/app-preview-new-ac/form/div/div[3]/div[3]/div/button[3]'))
     ).click()
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     # # click Okay button
 
